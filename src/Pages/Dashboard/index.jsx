@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
-import styles from "./style.module.css";
+import { HeaderDashboard, SectionUser, SectionData } from "./styles";
 
 const Dashboard = ({ authentication, setAuthentication }) => {
   function logout() {
@@ -10,29 +9,29 @@ const Dashboard = ({ authentication, setAuthentication }) => {
   const navigate = useNavigate();
 
   if (!authentication) {
-    navigate("/");
+    navigate("/", { replace: true });
   } else {
     return (
       <>
-        <header className={styles.headerDash}>
+        <HeaderDashboard>
           <h1>Kenzie Hub</h1>
 
           <button type="button" onClick={logout}>
             Sair
           </button>
-        </header>
-        <main className={styles.containerMain}>
-          <section className={styles.sectionUser}>
+        </HeaderDashboard>
+        <main>
+          <SectionUser>
             <h2>Olá, {window.localStorage.getItem("userName")}</h2>
             <span>{window.localStorage.getItem("userModule")}</span>
-          </section>
-          <section className={styles.sectionData}>
+          </SectionUser>
+          <SectionData>
             <h2>Que pena! Estamos em desenvolvimento :(</h2>
             <p>
               Nossa aplicação está em desenvolvimento, em breve teremos
               novidades
             </p>
-          </section>
+          </SectionData>
         </main>
       </>
     );

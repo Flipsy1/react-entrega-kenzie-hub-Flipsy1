@@ -1,32 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { api } from "../../Libs/axios";
-import { toast } from "react-toastify";
-import styles from "./style.module.css";
+import { api } from "../../Services/axios";
 
-const schema = yup.object({
-  name: yup.string().required("Nome é obrigatório"),
-  email: yup
-    .string()
-    .required("Email é obrigatória")
-    .email("Deve ser um email válido"),
-  password: yup
-    .string()
-    .matches(/[A-Z]/, "Deve conter ao menos 1 letra maiúscula")
-    .matches(/[a-z]/, "Deve conter ao menos 1 letra minúscula")
-    .matches(/(\d)/, "Deve conter ao menos um número")
-    .matches(/(\W)|_/, "Deve conter ao menos 1 caracter especial")
-    .matches(/.{8,}/, "Deve ter no mínimo 8 dígitos")
-    .required("Senha é obrigatória"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "Deve ser igual a senha"),
-  bio: yup.string().required("Deve colocar um descrição"),
-  contact: yup.string().required("Opção de contato obrigatória"),
-  course_module: yup.string().required("Selecione um módulo"),
-});
+import { modalSuccess } from "../../Components/modal/success";
+import { modalError } from "../../Components/modal/error";
+
+import { schemaRegister } from "../../Validations/registerUser";
+
+import { ContainerRegister, FormRegister } from "./styles";
 
 const RegisterPage = () => {
   const navegate = useNavigate();
@@ -35,7 +17,7 @@ const RegisterPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({ resolver: yupResolver(schemaRegister) });
 
   async function registerUser(data) {
     console.log(data);
@@ -44,30 +26,12 @@ const RegisterPage = () => {
       .post("users", data)
       .then((resp) => {
         console.log(resp.data);
-        toast.success("Conta criada com sucesso!", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        modalSuccess();
         navegate("/");
       })
       .catch((err) => {
-        console.log(err);
-        toast.error("Ops, algo deu errado!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        console.log(err.response.data.message);
+        modalError(err);
       });
   }
 
@@ -75,16 +39,13 @@ const RegisterPage = () => {
 
   return (
     <>
-      <main className={styles.containerRegister}>
+      <ContainerRegister>
         <div>
           <h1>Kenzie Hub</h1>
           <Link to={"/"}>Voltar</Link>
         </div>
 
-        <form
-          className={styles.formRegister}
-          onSubmit={handleSubmit(registerUser)}
-        >
+        <FormRegister onSubmit={handleSubmit(registerUser)}>
           <h2>Crie sua conta agora</h2>
 
           <span>Rápido e grátis, vamos nessa</span>
@@ -138,8 +99,8 @@ const RegisterPage = () => {
           </select>
 
           <button type="submit">Cadastrar</button>
-        </form>
-      </main>
+        </FormRegister>
+      </ContainerRegister>
     </>
   );
 };

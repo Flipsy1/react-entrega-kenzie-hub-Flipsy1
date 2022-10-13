@@ -1,14 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { api } from "../../Libs/axios";
-import styles from "./style.module.css";
+import { api } from "../../Services/axios";
 
-const schema = yup.object({
-  email: yup.string().required("Email obrigatório"),
-  password: yup.string().required("Senha obrigatória"),
-});
+import { schemaLogin } from "../../Validations/loginUser";
+
+import { ContainerLogin, Login } from "./styles";
 
 const LoginPage = ({ setAuthentication }) => {
   const navigate = useNavigate();
@@ -17,7 +14,7 @@ const LoginPage = ({ setAuthentication }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({ resolver: yupResolver(schemaLogin) });
 
   async function login(data) {
     console.log(data);
@@ -41,10 +38,10 @@ const LoginPage = ({ setAuthentication }) => {
 
   return (
     <>
-      <main className={styles.containerLogin}>
+      <ContainerLogin>
         <h1>Kenzie Hub</h1>
 
-        <div className={styles.Login}>
+        <Login>
           <form onSubmit={handleSubmit(login)}>
             <h2>Login</h2>
 
@@ -75,8 +72,8 @@ const LoginPage = ({ setAuthentication }) => {
 
             <Link to={"/register"}>Cadastre-se</Link>
           </div>
-        </div>
-      </main>
+        </Login>
+      </ContainerLogin>
     </>
   );
 };
