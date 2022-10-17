@@ -1,17 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { api } from "../../Services/axios";
-
-import { modalSuccess } from "../../Components/modal/success";
-import { modalError } from "../../Components/modal/error";
 
 import { schemaRegister } from "../../Validations/registerUser";
 
 import { ContainerRegister, FormRegister } from "./styles";
+import { useContext } from "react";
+import { UserContext } from "../../Contexts/UserContext";
 
 const RegisterPage = () => {
-  const navegate = useNavigate();
+  const { userRegister } = useContext(UserContext);
 
   const {
     register,
@@ -20,19 +18,8 @@ const RegisterPage = () => {
   } = useForm({ resolver: yupResolver(schemaRegister) });
 
   async function registerUser(data) {
-    console.log(data);
-
-    await api
-      .post("users", data)
-      .then((resp) => {
-        console.log(resp.data);
-        modalSuccess();
-        navegate("/");
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-        modalError(err);
-      });
+    //console.log(data);
+    userRegister(data);
   }
 
   const modulos = ["Primeiro módulo", "Segundo Módulo", "Terceiro Módulo"];

@@ -16,7 +16,8 @@ export const ContainerLogin = styled.main`
 `;
 
 export const Login = styled.div`
-  width: 400px;
+  max-width: 400px;
+  width: 70%;
   background-color: var(--grey-3);
   display: flex;
   flex-direction: column;

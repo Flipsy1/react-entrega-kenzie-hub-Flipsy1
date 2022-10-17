@@ -39,7 +39,7 @@ export const FormRegister = styled.form`
   }
 
   p {
-    color: var(--grey-1);
+    color: var(--gray-1);
   }
 
   label {

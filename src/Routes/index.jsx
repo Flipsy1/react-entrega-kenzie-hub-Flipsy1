@@ -1,29 +1,18 @@
 import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import ProtectedRoutes from "../Components/ProtectedRoutes";
 
 import Dashboard from "../Pages/Dashboard";
 import LoginPage from "../Pages/Login";
 import RegisterPage from "../Pages/Register";
 
 const RoutesMain = () => {
-  const [authentication, setAuthentication] = useState(false);
-
   return (
     <Routes>
-      <Route
-        path="/"
-        element={<LoginPage setAuthentication={setAuthentication} />}
-      />
+      <Route path="/" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route
-        path="/dashboard"
-        element={
-          <Dashboard
-            authentication={authentication}
-            setAuthentication={setAuthentication}
-          />
-        }
-      />
+      <Route path="/dashboard" element={<ProtectedRoutes />}>
+        <Route index element={<Dashboard />} />
+      </Route>
     </Routes>
   );
 };

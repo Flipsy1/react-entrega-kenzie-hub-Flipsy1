@@ -18,6 +18,10 @@ export const HeaderDashboard = styled.header`
     color: var(--gray-0);
     cursor: pointer;
   }
+
+  @media screen and (max-width: 690px) {
+    padding: 15px 2% 15px 2%;
+  }
 `;
 
 export const SectionUser = styled.section`
@@ -34,6 +38,10 @@ export const SectionUser = styled.section`
   span {
     color: var(--gray-1);
   }
+
+  @media screen and (max-width: 690px) {
+    padding: 15px 2% 15px 2%;
+  }
 `;
 
 export const SectionData = styled.section`
@@ -43,11 +51,28 @@ export const SectionData = styled.section`
   padding: 30px 20% 30px 20%;
   align-items: flex-start;
 
+  @media screen and (max-width: 690px) {
+    padding: 15px 2% 15px 2%;
+  }
+`;
+
+export const DataHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
   h2 {
     color: var(--gray-0);
   }
 
-  p {
-    color: var(--gray-1);
+  button {
+    padding: 5px 15px;
+    border-radius: 4px;
+    background-color: var(--grey-3);
+    color: var(--gray-0);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 18px;
   }
 `;

@@ -1,14 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { api } from "../../Services/axios";
 
 import { schemaLogin } from "../../Validations/loginUser";
 
 import { ContainerLogin, Login } from "./styles";
+import { useContext } from "react";
+import { UserContext } from "../../Contexts/UserContext";
 
-const LoginPage = ({ setAuthentication }) => {
-  const navigate = useNavigate();
+const LoginPage = () => {
+  const { userLogin } = useContext(UserContext);
 
   const {
     register,
@@ -17,23 +18,8 @@ const LoginPage = ({ setAuthentication }) => {
   } = useForm({ resolver: yupResolver(schemaLogin) });
 
   async function login(data) {
-    console.log(data);
-
-    await api
-      .post("sessions", data)
-      .then((resp) => {
-        console.log(resp);
-
-        window.localStorage.clear();
-        window.localStorage.setItem("authToken", resp.data.token);
-        window.localStorage.setItem("userName", resp.data.user.name);
-        window.localStorage.setItem("userModule", resp.data.user.course_module);
-
-        setAuthentication(true);
-
-        navigate("/dashboard");
-      })
-      .catch((err) => console.log(err));
+    //console.log(data);
+    userLogin(data);
   }
 
   return (

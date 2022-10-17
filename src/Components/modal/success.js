@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 
-export const modalSuccess = () => {
-  toast.success("Conta criada com sucesso!", {
+export const modalSuccess = (mensage) => {
+  toast.success(`${mensage}`, {
     position: "top-right",
     autoClose: 2000,
     hideProgressBar: false,
