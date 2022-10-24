@@ -4,13 +4,54 @@ import { api } from "../Services/axios";
 
 import { modalSuccess } from "../Components/modal/success";
 import { modalError } from "../Components/modal/error";
+import { iLoginData } from "../Pages/Login";
+import { AxiosError } from "axios";
+import { iRegisterData } from "../Pages/Register";
 
-export const UserContext = createContext({});
+interface iUserProvider {
+  children: React.ReactNode;
+}
 
-export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [currentRoute, setCurrentRoute] = useState(null);
-  const [techs, setTechs] = useState();
+interface iUser {
+  id: string;
+  name: string;
+  email: string;
+  course_module: string;
+  bio: string;
+  created_at: string;
+  updated_at: string;
+  techs: iTechs[];
+}
+
+export interface iTechs {
+  id: string;
+  title: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface iApiError {
+  error: string;
+}
+
+interface iUserContextValue {
+  user: iUser | null;
+  currentRoute: string | null;
+  setCurrentRoute: React.Dispatch<React.SetStateAction<string | null>>;
+  userLogin: (data: iLoginData) => void;
+  userLogout: () => void;
+  userRegister: (data: iRegisterData) => void;
+  techs: iTechs[];
+  setTechs: React.Dispatch<React.SetStateAction<iTechs[]>>;
+}
+
+export const UserContext = createContext({} as iUserContextValue);
+
+export const UserProvider = ({ children }: iUserProvider) => {
+  const [user, setUser] = useState<iUser | null>(null);
+  const [currentRoute, setCurrentRoute] = useState<string | null>(null);
+  const [techs, setTechs] = useState([] as iTechs[]);
   //console.log(user);
   const navigate = useNavigate();
 
@@ -27,7 +68,7 @@ export const UserProvider = ({ children }) => {
           //console.log(response);
           setUser(response.data);
           setTechs(response.data.techs);
-          navigate(currentRoute);
+          navigate(currentRoute ? currentRoute : "dashboard");
         } catch (error) {
           localStorage.removeItem("authToken");
           navigate("/");
@@ -37,7 +78,7 @@ export const UserProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const userLogin = async (data) => {
+  const userLogin = async (data: iLoginData) => {
     try {
       await api.post("sessions", data).then((resp) => {
         //console.log(resp);
@@ -52,7 +93,8 @@ export const UserProvider = ({ children }) => {
       });
     } catch (error) {
       console.log(error);
-      modalError(error);
+      const requestError = error as AxiosError<iApiError>;
+      modalError(requestError.response?.data.error);
     }
   };
 
@@ -62,7 +104,7 @@ export const UserProvider = ({ children }) => {
     navigate("/");
   };
 
-  const userRegister = async (data) => {
+  const userRegister = async (data: iRegisterData) => {
     try {
       await api.post("users", data).then((resp) => {
         //console.log(resp.data);
@@ -70,8 +112,9 @@ export const UserProvider = ({ children }) => {
         navigate("/");
       });
     } catch (error) {
-      console.log(error.response.data.message);
-      modalError(error);
+      console.log(error);
+      const requestError = error as AxiosError<iApiError>;
+      modalError(requestError.response?.data.error);
     }
   };
 

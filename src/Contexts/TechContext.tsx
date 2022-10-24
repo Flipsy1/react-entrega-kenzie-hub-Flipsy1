@@ -1,17 +1,30 @@
+import { AxiosError } from "axios";
 import { createContext, useContext, useState } from "react";
 import { modalError } from "../Components/modal/error";
 import { modalSuccess } from "../Components/modal/success";
+import { iRegiterTechData } from "../Components/modal/tech/techRegister";
 import { api } from "../Services/axios";
-import { UserContext } from "./UserContext";
+import { iApiError, iTechs, UserContext } from "./UserContext";
 
-export const TechContext = createContext({});
+interface iTechProvider {
+  children: React.ReactNode;
+}
 
-export const TechProvider = ({ children }) => {
+interface iTechContextValue {
+  modal: boolean;
+  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+  closeModal: () => void;
+  openModal: () => void;
+  addTech: (data: iRegiterTechData) => void;
+  removeTech: (deleteTech: iTechs) => void;
+}
+
+export const TechContext = createContext({} as iTechContextValue);
+
+export const TechProvider = ({ children }: iTechProvider) => {
   const { techs, setTechs } = useContext(UserContext);
 
   const [modal, setModal] = useState(false);
-
-  //console.log(techs);
 
   function openModal() {
     setModal(true);
@@ -21,7 +34,7 @@ export const TechProvider = ({ children }) => {
     setModal(false);
   }
 
-  const addTech = async (data) => {
+  const addTech = async (data: iRegiterTechData) => {
     try {
       const token = localStorage.getItem("authToken");
 
@@ -36,11 +49,12 @@ export const TechProvider = ({ children }) => {
       //console.log(resp);
     } catch (error) {
       console.log(error);
-      modalError(error);
+      const requestError = error as AxiosError<iApiError>;
+      modalError(requestError.response?.data.error);
     }
   };
 
-  const removeTech = async (deleteTech) => {
+  const removeTech = async (deleteTech: iTechs) => {
     try {
       const token = localStorage.getItem("authToken");
 
@@ -53,7 +67,8 @@ export const TechProvider = ({ children }) => {
       setTechs(newList);
     } catch (error) {
       console.log(error);
-      modalError(error);
+      const requestError = error as AxiosError<iApiError>;
+      modalError(requestError.response?.data.error);
     }
   };
 
@@ -65,7 +80,6 @@ export const TechProvider = ({ children }) => {
         closeModal,
         openModal,
         addTech,
-        techs,
         removeTech,
       }}
     >

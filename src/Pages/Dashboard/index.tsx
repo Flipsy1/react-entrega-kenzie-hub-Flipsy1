@@ -25,8 +25,8 @@ const Dashboard = () => {
       </HeaderDashboard>
       <main>
         <SectionUser>
-          <h2>Olá, {user.name}</h2>
-          <span>{user.course_module}</span>
+          <h2>Olá, {user?.name}</h2>
+          <span>{user?.course_module}</span>
         </SectionUser>
         <SectionData>
           <DataHeader>

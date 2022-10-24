@@ -8,6 +8,11 @@ import { ContainerLogin, Login } from "./styles";
 import { useContext } from "react";
 import { UserContext } from "../../Contexts/UserContext";
 
+export interface iLoginData {
+  email: String;
+  password: String;
+}
+
 const LoginPage = () => {
   const { userLogin } = useContext(UserContext);
 
@@ -15,9 +20,9 @@ const LoginPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schemaLogin) });
+  } = useForm<iLoginData>({ resolver: yupResolver(schemaLogin) });
 
-  async function login(data) {
+  async function login(data: iLoginData) {
     //console.log(data);
     userLogin(data);
   }
@@ -33,19 +38,13 @@ const LoginPage = () => {
 
             <label htmlFor="emailLogin">Email</label>
 
-            <input
-              type="email"
-              name="email"
-              id="emailLogin"
-              {...register("email")}
-            />
+            <input type="email" id="emailLogin" {...register("email")} />
             <p>{errors.email?.message}</p>
 
             <label htmlFor="passwordLogin">Senha</label>
 
             <input
               type="password"
-              name="password"
               id="passwordLogin"
               {...register("password")}
             />

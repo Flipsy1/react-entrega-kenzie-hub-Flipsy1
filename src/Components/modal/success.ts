@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-export const modalSuccess = (mensage) => {
+export const modalSuccess = (mensage: string) => {
   toast.success(`${mensage}`, {
     position: "top-right",
     autoClose: 2000,

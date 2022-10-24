@@ -8,6 +8,25 @@ import { ContainerRegister, FormRegister } from "./styles";
 import { useContext } from "react";
 import { UserContext } from "../../Contexts/UserContext";
 
+export interface iRegisterData {
+  name: string;
+  email: string;
+  password: string;
+  bio: string;
+  contact: string;
+  course_module: string;
+}
+
+interface iRegisterDataForm {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  bio: string;
+  contact: string;
+  course_module: string;
+}
+
 const RegisterPage = () => {
   const { userRegister } = useContext(UserContext);
 
@@ -15,9 +34,9 @@ const RegisterPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schemaRegister) });
+  } = useForm<iRegisterDataForm>({ resolver: yupResolver(schemaRegister) });
 
-  async function registerUser(data) {
+  async function registerUser(data: iRegisterData) {
     //console.log(data);
     userRegister(data);
   }
@@ -38,46 +57,35 @@ const RegisterPage = () => {
           <span>Rápido e grátis, vamos nessa</span>
 
           <label htmlFor="name">Nome</label>
-          <input type="text" name="name" id="name" {...register("name")} />
+          <input type="text" id="name" {...register("name")} />
           <p>{errors.name?.message}</p>
 
           <label htmlFor="email">Email</label>
-          <input type="email" name="email" id="email" {...register("email")} />
+          <input type="email" id="email" {...register("email")} />
           <p>{errors.email?.message}</p>
 
           <label htmlFor="">Senha</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            {...register("password")}
-          />
+          <input type="password" id="password" {...register("password")} />
           <p>{errors.password?.message}</p>
 
           <label htmlFor="confirmPassword">Confirmar senha</label>
           <input
             type="password"
-            name="confirmPassword"
             id="confirmPassword"
             {...register("confirmPassword")}
           />
           <p>{errors.confirmPassword?.message}</p>
 
           <label htmlFor="bio">Bio</label>
-          <input type="text" name="bio" id="bio" {...register("bio")} />
+          <input type="text" id="bio" {...register("bio")} />
           <p>{errors.bio?.message}</p>
 
           <label htmlFor="contact">contato</label>
-          <input
-            type="text"
-            name="contact"
-            id="contact"
-            {...register("contact")}
-          />
+          <input type="text" id="contact" {...register("contact")} />
           <p>{errors.contact?.message}</p>
 
           <label htmlFor="modulo">Selecionar módulo</label>
-          <select name="modulo" id="modulo" {...register("course_module")}>
+          <select id="modulo" {...register("course_module")}>
             {modulos.map((modulo, index) => (
               <option key={index} value={modulo}>
                 {modulo}
