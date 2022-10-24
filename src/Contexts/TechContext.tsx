@@ -50,7 +50,7 @@ export const TechProvider = ({ children }: iTechProvider) => {
     } catch (error) {
       console.log(error);
       const requestError = error as AxiosError<iApiError>;
-      modalError(requestError.response?.data.error);
+      modalError(requestError.response?.data.message);
     }
   };
 
@@ -68,7 +68,7 @@ export const TechProvider = ({ children }: iTechProvider) => {
     } catch (error) {
       console.log(error);
       const requestError = error as AxiosError<iApiError>;
-      modalError(requestError.response?.data.error);
+      modalError(requestError.response?.data.message);
     }
   };
 

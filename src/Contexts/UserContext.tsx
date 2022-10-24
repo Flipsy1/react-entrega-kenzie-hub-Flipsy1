@@ -32,7 +32,7 @@ export interface iTechs {
 }
 
 export interface iApiError {
-  error: string;
+  message: string;
 }
 
 interface iUserContextValue {
@@ -94,7 +94,7 @@ export const UserProvider = ({ children }: iUserProvider) => {
     } catch (error) {
       console.log(error);
       const requestError = error as AxiosError<iApiError>;
-      modalError(requestError.response?.data.error);
+      modalError(requestError.response?.data.message);
     }
   };
 
@@ -114,7 +114,7 @@ export const UserProvider = ({ children }: iUserProvider) => {
     } catch (error) {
       console.log(error);
       const requestError = error as AxiosError<iApiError>;
-      modalError(requestError.response?.data.error);
+      modalError(requestError.response?.data.message);
     }
   };
 

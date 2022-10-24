@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 
-export const modalSuccess = (mensage: string) => {
-  toast.success(`${mensage}`, {
+export const modalError = (err) => {
+  toast.error(`Ops, ${err}!`, {
     position: "top-right",
     autoClose: 2000,
     hideProgressBar: false,
